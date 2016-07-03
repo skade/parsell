@@ -19,8 +19,6 @@
 //! [Crate](https://crates.io/crates/parsell) |
 //! [CI](https://travis-ci.org/asajeffrey/parsell)
 
-#![feature(unboxed_closures)]
-
 use self::ParseResult::{Done, Continue};
 
 use std::borrow::Cow;
@@ -957,7 +955,7 @@ pub trait Function<S> {
 
 // NOTE(eddyb): a generic over U where F: Fn(T) -> U doesn't allow HRTB in both T and U.
 // See https://github.com/rust-lang/rust/issues/30867 for more details.
-impl<F, S> Function<S> for F where F: Fn<(S, )>
+impl<F, S, X> Function<S> for F where F: Fn(S) -> X
 {
     type Output = F::Output;
     fn apply(&self, arg: S) -> F::Output {
